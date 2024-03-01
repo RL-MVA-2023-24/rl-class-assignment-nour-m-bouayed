@@ -83,7 +83,11 @@ class ProjectAgent:
             self.update_target_tau = config['update_target_tau'] if 'update_target_tau' in config.keys() else 0.005
       
     def act(self, observation, use_random=False):
-        return greedy_action(self.model, observation)
+        if np.random.rand() < 0.01 and use_random:
+            action = env.action_space.sample()
+        else:
+            action = greedy_action(self.model, observation)
+        return action
 
     def save(self):
         torch.save(self.model.state_dict(), self.path)
