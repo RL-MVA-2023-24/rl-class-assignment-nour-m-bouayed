@@ -21,7 +21,7 @@ def seed_everything(seed: int = 42):
 if __name__ == "__main__":
     seed_everything(seed=42)
     # Initialization of the agent. Replace DummyAgent with your custom agent implementation.
-    agent = ProjectAgent('DQN_2')
+    agent = ProjectAgent('DQN_3')
     agent.load()
     # Keep the following lines to evaluate your agent unchanged.
     score_agent: float = evaluate_HIV(agent=agent, nb_episode=1)
