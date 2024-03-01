@@ -20,7 +20,7 @@ env = TimeLimit(
 # You have to implement your own agent.
 # Don't modify the methods names and signatures, but you can add methods.
 # ENJOY!
-class FQI_Agent:
+class ProjectAgent:
     def __init__(self, model_name):
         self.env = TimeLimit(env=HIVPatient(domain_randomization=False), max_episode_steps=200)
         self.path = os.path.join(os.getcwd(),f'models/{model_name}.pkl')
@@ -126,7 +126,7 @@ def seed_everything(seed: int = 42):
 if __name__ == "__main__":
     seed_everything(seed=42)
     # Initialization of the agent. Replace DummyAgent with your custom agent implementation.
-    agent = FQI_Agent('FQI')
+    agent = ProjectAgent('FQI')
     agent.train(10000, 1, 1000, 0.9)
 #     agent.train(10,1,1,0.9)
     agent.load()
