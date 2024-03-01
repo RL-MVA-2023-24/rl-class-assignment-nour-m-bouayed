@@ -27,7 +27,7 @@ def greedy_action(network, state):
         return torch.argmax(Q).item()
 
 class DQN(torch.nn.Module):
-    def __init__(self, input_dim=env.observation_space.shape[0], hidden_dim=512, output_dim=env.action_space.n, depth = 5):
+    def __init__(self, input_dim=env.observation_space.shape[0], hidden_dim=256, output_dim=env.action_space.n, depth = 6):
         super(DQN, self).__init__()
         self.input_layer = torch.nn.Linear(input_dim, hidden_dim)
         self.hidden_layers = torch.nn.ModuleList([torch.nn.Linear(hidden_dim, hidden_dim) for _ in range(depth - 1)])
@@ -39,7 +39,7 @@ class DQN(torch.nn.Module):
         for layer in self.hidden_layers:
             x = self.activation(layer(x))
         return self.output_layer(x)
-
+    
 class ReplayBuffer:
     def __init__(self, capacity, device):
         self.capacity = capacity # capacity of the buffer
