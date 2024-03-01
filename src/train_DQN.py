@@ -5,7 +5,6 @@ import torch
 from torch import nn
 import os
 from copy import deepcopy
-import matplotlib.pyplot as plt
 from env_hiv import HIVPatient
 from env_hiv import HIVPatient
 from evaluate import evaluate_HIV, evaluate_HIV_population
