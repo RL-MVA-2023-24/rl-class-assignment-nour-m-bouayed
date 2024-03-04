@@ -85,7 +85,7 @@ class ReplayBuffer:
         return len(self.data)
     
 class ProjectAgent:
-    def __init__(self, save_name='DQN_mix', train=False, config={}):
+    def __init__(self, save_name='model-one-2.1e+10--dr-2.2e+10.pt', train=False, config={}):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model =  DQN().to(self.device)
         self.load_path = os.path.join(os.getcwd(),f'models/{save_name}.pt')
@@ -146,7 +146,7 @@ class ProjectAgent:
         state, _ = env.reset()
         epsilon = self.epsilon_max
         step = 0
-        previous_best_score = 0
+        previous_best_score, previous_best_score_dr = 0, 0
         random = "1"
         while episode < max_episode:
             # update epsilon
@@ -179,14 +179,14 @@ class ProjectAgent:
             step += 1
             if done or trunc:
                 #LOGGING----------------------------
-                if episode > 70:
-                    if episode%evaluate_every==0:
-                        score, score_dr = self.evaluate(dr=True)
-                    else:
-                        score, _ = self.evaluate()
-                        if score > previous_best_score:
-                            torch.save(self.model.state_dict(), f"model-{score:.1e}.pt")
-                            previous_best_score = score
+                if episode > 120:
+                    score, score_dr = self.evaluate(dr=True)
+                    if score > previous_best_score:
+                        torch.save(self.model.state_dict(), f"model-one-{score:.1e}--dr-{score_dr:.1e}.pt")
+                        previous_best_score = score
+                    if score_dr >previous_best_score_dr:
+                        torch.save(self.model.state_dict(), f"model-one-{score:.1e}--dr-{score_dr:.1e}.pt")
+                        previous_best_score_dr = score_dr
                 if np.random.rand() < 0.4:
                     random = "0"
                     env = TimeLimit(env=HIVPatient(domain_randomization=False), max_episode_steps=200)
@@ -221,7 +221,7 @@ if __name__=="__main__":
     seed_everything(seed=42)
     # DQN config
     config = {'nb_actions': env.action_space.n,
-            'learning_rate': 0.001,
+            'learning_rate': 0.0005,
             'gamma': 0.99,
             'buffer_size': 1000000,
             'epsilon_min': 0.01,
@@ -234,7 +234,7 @@ if __name__=="__main__":
             'update_target_freq': 400,
             'criterion': torch.nn.SmoothL1Loss()}
     
-    max_episode = 400
+    max_episode = 300
     # Train agent
     agent = ProjectAgent(train=True, config=config)
 #     agent.load(train=True)
