@@ -58,7 +58,7 @@ class ReplayBuffer:
         return len(self.data)
     
 class ProjectAgent:
-    def __init__(self, save_name='DQN', train=False, config={}):
+    def __init__(self, save_name='DQN_mix', train=False, config={}):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model =  DQN().to(device)
         self.path = os.path.join(os.getcwd(),f'models/{save_name}.pt')
